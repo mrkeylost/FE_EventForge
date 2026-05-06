@@ -5,7 +5,7 @@ interface PropTypes {
 }
 
 const PageHead = (props: PropTypes) => {
-  const { title = "Event" } = props;
+  const { title = "EventForge" } = props;
 
   return (
     <Head>
