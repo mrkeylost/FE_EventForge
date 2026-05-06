@@ -1,4 +1,4 @@
-import { env } from "@/pages/config/env";
+import { env } from "@/config/env";
 import axios from "axios";
 import { Session } from "next-auth";
 import { getSession } from "next-auth/react";
