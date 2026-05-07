@@ -1,5 +1,5 @@
 import api from "@/utils/axios";
-import endpoint from "./endpoint.constant";
+import endpoint from "../constant/commons/endpoint.constants";
 import { IActivation, ILogin, IRegister } from "@/types/auth";
 
 const authServices = {

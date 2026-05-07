@@ -1,4 +1,4 @@
-import useRegister from "@/hooks/useRegister";
+import useRegister from "@/hooks/auth/useRegister";
 import { cn } from "@/utils/cn";
 import { Button, Card, CardBody, Input, Spinner } from "@heroui/react";
 import { Eye, EyeOff } from "lucide-react";
