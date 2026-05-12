@@ -1,4 +1,4 @@
-const DashboardMember = () => {
+const MemberDashboard = () => {
   return (
     <div>
       <div>Member Dashboard</div>
@@ -6,4 +6,4 @@ const DashboardMember = () => {
   );
 };
 
-export default DashboardMember;
+export default MemberDashboard;

@@ -1,16 +1,16 @@
-import DashboardAdmin from "@/components/admin/dashboard";
+import AdminDashboard from "@/components/admin/dashboard/AdminDashboard";
 import DashboardLayout from "@/components/layouts/dashboard/DashboardLayout";
 
-const DashboardAdminPage = () => {
+const AdminDashboardPage = () => {
   return (
     <DashboardLayout
       title="Dashboard"
       description="Dashboard Admin"
       type="admin"
     >
-      <DashboardAdmin />
+      <AdminDashboard />
     </DashboardLayout>
   );
 };
 
-export default DashboardAdminPage;
+export default AdminDashboardPage;

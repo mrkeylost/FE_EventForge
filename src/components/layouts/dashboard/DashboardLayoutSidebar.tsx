@@ -52,9 +52,9 @@ const DashboardLayoutSidebar = (props: PropTypes) => {
                 "bg-danger-500 text-white": item.href === router.pathname,
               })}
               startContent={item.icon}
-              textValue={item.label}
               aria-labelledby={item.label}
               aria-describedby={item.label}
+              href={item.href}
             >
               <p className="text-small">{item.label}</p>
             </ListboxItem>

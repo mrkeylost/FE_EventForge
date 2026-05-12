@@ -8,7 +8,6 @@ interface PropTypes {
 
 const ActivationPage = (props: PropTypes) => {
   const { status } = props;
-  console.log(props);
 
   return (
     <AuthLayout title="EventForge | Activation">

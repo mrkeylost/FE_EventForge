@@ -1,16 +1,16 @@
 import DashboardLayout from "@/components/layouts/dashboard/DashboardLayout";
-import DashboardMember from "@/components/member/dashboard";
+import MemberDashboard from "@/components/member/dashboard/MemberDashboard";
 
-const DashboardMemberPage = () => {
+const MemberDashboardPage = () => {
   return (
     <DashboardLayout
       title="Dashboard"
       description="Dashboard Member"
       type="member"
     >
-      <DashboardMember />
+      <MemberDashboard />
     </DashboardLayout>
   );
 };
 
-export default DashboardMemberPage;
+export default MemberDashboardPage;

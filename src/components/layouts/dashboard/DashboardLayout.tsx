@@ -26,7 +26,7 @@ const DashboardLayout = (props: PropTypes) => {
           sidebarItems={type === "admin" ? SIDEBAR_ADMIN : SIDEBAR_MEMBER}
           isOpen={open}
         />
-        <div className="h-screen w-full overflow-y-auto">
+        <div className="h-screen w-full overflow-y-auto px-7 py-4">
           <Navbar
             className="flex justify-between bg-transparent px-0"
             classNames={{ wrapper: "p-0" }}
