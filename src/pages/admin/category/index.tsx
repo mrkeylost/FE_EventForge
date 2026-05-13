@@ -1,5 +1,5 @@
-import AdminCategory from "@/components/admin/category/AdminCategory";
-import DashboardLayout from "@/components/layouts/dashboard/DashboardLayout";
+import AdminCategory from "@/features/admin/category/_components/AdminCategory";
+import DashboardLayout from "@/components/layouts/DashboardLayout";
 
 const AdminCategoryPage = () => {
   return (

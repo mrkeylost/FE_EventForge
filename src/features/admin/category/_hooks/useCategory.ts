@@ -1,13 +1,9 @@
-import {
-  DELAY,
-  LIMIT_DEFAULT,
-  PAGE_DEFAULT,
-} from "@/constant/commons/list.constants";
+import { DELAY, LIMIT_DEFAULT, PAGE_DEFAULT } from "@/constant/list.constants";
 import categoryServices from "@/services/category.service";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { ChangeEvent } from "react";
-import useDebounce from "../useDebounce";
+import useDebounce from "../../../../hooks/useDebounce";
 
 const useCategory = () => {
   const router = useRouter();

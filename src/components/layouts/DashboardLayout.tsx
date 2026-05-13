@@ -4,7 +4,7 @@ import DashboardLayoutSidebar from "./DashboardLayoutSidebar";
 import {
   SIDEBAR_ADMIN,
   SIDEBAR_MEMBER,
-} from "@/constant/dashboard/DashboardLayout.constants";
+} from "@/constant/DashboardLayout.constants";
 import { Navbar, NavbarMenuToggle } from "@heroui/react";
 
 interface PropTypes {

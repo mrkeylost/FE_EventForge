@@ -4,8 +4,8 @@ import { Eye, Pencil, Trash2 } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { Key, ReactNode, useCallback, useEffect } from "react";
-import { COLUMN_LIST_CATEGORY } from "./Category.constants";
-import useCategory from "@/hooks/category/useCategory";
+import { COLUMN_LIST_CATEGORY } from "../../../../constant/Category.constants";
+import useCategory from "@/features/admin/category/_hooks/useCategory";
 import InputFile from "@/components/ui/InputFile";
 
 const AdminCategory = () => {

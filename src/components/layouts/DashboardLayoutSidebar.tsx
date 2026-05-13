@@ -4,13 +4,13 @@ import { LogOut } from "lucide-react";
 import { signOut } from "next-auth/react";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { JSX } from "react";
+import { ComponentType } from "react";
 
 interface SidebarItem {
   key: string;
   label: string;
   href: string;
-  icon: JSX.Element;
+  icon: ComponentType;
 }
 
 interface PropTypes {
@@ -45,20 +45,24 @@ const DashboardLayoutSidebar = (props: PropTypes) => {
           variant="solid"
           aria-label="Dashboard Menu"
         >
-          {(item) => (
-            <ListboxItem
-              key={item.key}
-              className={cn("my-1 h-12 text-2xl", {
-                "bg-danger-500 text-white": item.href === router.pathname,
-              })}
-              startContent={item.icon}
-              aria-labelledby={item.label}
-              aria-describedby={item.label}
-              href={item.href}
-            >
-              <p className="text-small">{item.label}</p>
-            </ListboxItem>
-          )}
+          {(item) => {
+            const Icon = item.icon;
+
+            return (
+              <ListboxItem
+                key={item.key}
+                className={cn("my-1 h-12 text-2xl", {
+                  "bg-danger-500 text-white": item.href === router.pathname,
+                })}
+                startContent={<Icon />}
+                aria-labelledby={item.label}
+                aria-describedby={item.label}
+                href={item.href}
+              >
+                <p className="text-small">{item.label}</p>
+              </ListboxItem>
+            );
+          }}
         </Listbox>
       </div>
       <div className="flex items-center p-1">

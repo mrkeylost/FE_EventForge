@@ -1,4 +1,4 @@
-import ActivationSuccess from "@/components/auth/ActivationSuccess";
+import ActivationSuccess from "@/features/auth/_components/ActivationSuccess";
 import AuthLayout from "@/components/layouts/AuthLayout";
 import authServices from "@/services/auth.service";
 

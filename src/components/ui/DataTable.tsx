@@ -1,4 +1,4 @@
-import { LIMIT_LISTS } from "@/constant/commons/list.constants";
+import { LIMIT_LISTS } from "@/constant/list.constants";
 import { cn } from "@/utils/cn";
 import {
   Button,

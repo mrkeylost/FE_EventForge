@@ -1,4 +1,4 @@
-import endpoint from "@/constant/commons/endpoint.constants";
+import endpoint from "@/constant/endpoint.constants";
 import { ICategory } from "@/types/category";
 import api from "@/utils/axios";
 
