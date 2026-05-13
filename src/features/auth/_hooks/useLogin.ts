@@ -6,6 +6,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { signIn } from "next-auth/react";
 import { useState } from "react";
+import { addToast } from "@heroui/react";
 
 const loginSchema = Yup.object().shape({
   identifier: Yup.string().required("Please input your email or username"),
@@ -46,10 +47,21 @@ const useLogin = () => {
       setError("root", {
         message: err.message,
       });
+
+      addToast({
+        title: err.message,
+        description: "please check your username or email and password",
+        color: "danger",
+      });
     },
     onSuccess: () => {
       router.push(callbackUrl);
       reset();
+
+      addToast({
+        title: "Login Success",
+        color: "success",
+      });
     },
   });
 

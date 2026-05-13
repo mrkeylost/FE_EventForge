@@ -6,6 +6,7 @@ import { IRegister } from "@/types/auth";
 import authServices from "@/services/auth.service";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/router";
+import { addToast } from "@heroui/react";
 
 const registerSchema = Yup.object().shape({
   fullName: Yup.string().required("Please input your fullname"),
@@ -15,7 +16,27 @@ const registerSchema = Yup.object().shape({
     .required("Please input your fullname"),
   password: Yup.string()
     .min(8, "Password must be at least 8 characters")
-    .required("Please input your password"),
+    .required("Please input your password")
+    .test(
+      "at-least-one-uppercase-letter",
+      "Password must contains at least one uppercase letter",
+      (value) => {
+        if (!value) return false;
+
+        const regex = /^(?=.*[A-Z])/;
+        return regex.test(value);
+      },
+    )
+    .test(
+      "at-least-one-number",
+      "Password must Contains at least one number",
+      (value) => {
+        if (!value) return false;
+
+        const regex = /^(?=.*\d)/;
+        return regex.test(value);
+      },
+    ),
   confirmPassword: Yup.string()
     .required()
     .oneOf([Yup.ref("password"), ""], "Password not match"),
@@ -58,10 +79,21 @@ const useRegister = () => {
       setError("root", {
         message: err.message,
       });
+
+      addToast({
+        title: "Register Failed",
+        description: err.message,
+        color: "danger",
+      });
     },
     onSuccess: () => {
       router.push("/auth/register/success");
       reset();
+
+      addToast({
+        title: "Register Success",
+        color: "success",
+      });
     },
   });
 

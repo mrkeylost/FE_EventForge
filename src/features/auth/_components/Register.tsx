@@ -1,5 +1,4 @@
 import useRegister from "@/features/auth/_hooks/useRegister";
-import { cn } from "@/utils/cn";
 import { Button, Card, CardBody, Input, Spinner } from "@heroui/react";
 import { Eye, EyeOff } from "lucide-react";
 import Image from "next/image";
@@ -45,17 +44,9 @@ const Register = () => {
               Login here
             </Link>
           </p>
-          {errors.root && (
-            <p className="text-danger mb-2 font-medium">
-              {errors.root.message}
-            </p>
-          )}
           <form
             onSubmit={handleSubmit(handleRegister)}
-            className={cn(
-              "flex w-80 flex-col",
-              Object.keys(errors).length > 0 ? "gap-2" : "gap-4",
-            )}
+            className="flex w-80 flex-col gap-4"
           >
             <Controller
               name="fullName"

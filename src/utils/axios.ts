@@ -1,6 +1,6 @@
 import { env } from "@/config/env";
 import { SessionExtended } from "@/types/auth";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { getSession } from "next-auth/react";
 
 const headers = {
@@ -27,7 +27,10 @@ api.interceptors.request.use(
 
 api.interceptors.response.use(
   (res) => res,
-  (error) => Promise.reject(error),
+  (error: AxiosError<{ meta: { status: number; message: string } }>) => {
+    const message = error.response?.data?.meta?.message ?? error.message;
+    return Promise.reject(new Error(message));
+  },
 );
 
 export default api;
