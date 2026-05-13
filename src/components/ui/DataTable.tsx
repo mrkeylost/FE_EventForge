@@ -79,8 +79,9 @@ const DataTable = (props: PropTypes) => {
 
   const bottomContent = useMemo(() => {
     return (
-      <div className="flex items-center justify-center px-2 py-2 sm:justify-between">
+      <div className="flex items-center justify-center sm:justify-between">
         <Select
+          disallowEmptySelection
           className="hidden max-w-36 md:block"
           size="md"
           selectedKeys={[limit]}
@@ -93,17 +94,20 @@ const DataTable = (props: PropTypes) => {
           ))}
         </Select>
 
-        <Pagination
-          showControls
-          isCompact
-          classNames={{
-            cursor: "bg-foreground text-background",
-          }}
-          color="danger"
-          page={currentPage}
-          total={totalPages}
-          onChange={onChangePage}
-        />
+        {totalPages > 1 && (
+          <Pagination
+            showControls
+            isCompact
+            classNames={{
+              cursor: "bg-foreground text-background",
+            }}
+            color="danger"
+            page={currentPage}
+            total={totalPages}
+            onChange={onChangePage}
+            loop
+          />
+        )}
       </div>
     );
   }, [limit, onChangeLimit, currentPage, totalPages, onChangePage]);

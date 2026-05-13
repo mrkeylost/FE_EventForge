@@ -3,22 +3,45 @@ import { Button, Tooltip } from "@heroui/react";
 import { Eye, Pencil, Trash2 } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { Key, ReactNode, useCallback } from "react";
+import { Key, ReactNode, useCallback, useEffect } from "react";
 import { COLUMN_LIST_CATEGORY } from "./Category.constants";
-import { LIMIT_LISTS } from "@/constant/commons/list.constants";
+import useCategory from "@/hooks/category/useCategory";
+import InputFile from "@/components/ui/InputFile";
 
 const AdminCategory = () => {
   const router = useRouter();
+  const {
+    setUrl,
+    currentPage,
+    currentLimit,
+    handleChangePage,
+    handleChangeLimit,
+    handleChangeSearch,
+    handleClearSearch,
+    dataCategory,
+    isLoadingCategory,
+    isRefetchingCategory,
+  } = useCategory();
+
+  useEffect(() => {
+    if (!router.isReady) return;
+
+    const { limit, page, search } = router.query;
+
+    if (!limit || !page || search === undefined) {
+      setUrl();
+    }
+  }, [router.isReady, router.query, setUrl]);
 
   const renderCell = useCallback(
     (category: Record<string, unknown>, columnKey: Key) => {
       const cellValue = category[columnKey as keyof typeof category];
 
       switch (columnKey) {
-        case "icon":
-          return (
-            <Image src={`${cellValue}`} alt="icon" width={100} height={200} />
-          );
+        // case "icon":
+        //   return (
+        //     <Image src={`${cellValue}`} alt="icon" width={100} height={200} />
+        //   );
         case "actions":
           return (
             <div className="flex items-center justify-center gap-1">
@@ -68,34 +91,26 @@ const AdminCategory = () => {
 
   return (
     <section>
-      <DataTable
-        renderCell={renderCell}
-        columns={COLUMN_LIST_CATEGORY}
-        data={[
-          {
-            _id: "111",
-            name: "Category 1",
-            description: "Description 1",
-            icon: "/images/category/icon-exhibition.jpg",
-          },
-          {
-            _id: "112",
-            name: "Category 2",
-            description: "Description 2",
-            icon: "/images/category/icon-festival.jpg",
-          },
-        ]}
-        buttonTopContentLabel="Create Category"
-        onClickButtonTop={() => {}}
-        currentPage={1}
-        totalPages={10}
-        limit={LIMIT_LISTS[0].label}
-        onChangeLimit={() => {}}
-        onChangePage={() => {}}
-        onClear={() => {}}
-        onSearchChange={() => {}}
-        emptyContent={"No categories found"}
-      />
+      {Object.keys(router.query).length > 0 && (
+        <DataTable
+          renderCell={renderCell}
+          columns={COLUMN_LIST_CATEGORY}
+          data={dataCategory?.data || []}
+          isLoading={isLoadingCategory || isRefetchingCategory}
+          buttonTopContentLabel="Create Category"
+          onClickButtonTop={() => {}}
+          currentPage={Number(currentPage)}
+          totalPages={dataCategory?.pagination.totalPages}
+          limit={String(currentLimit)}
+          onChangeLimit={handleChangeLimit}
+          onChangePage={handleChangePage}
+          onClear={handleClearSearch}
+          onSearchChange={handleChangeSearch}
+          emptyContent={"No categories found"}
+        />
+      )}
+
+      <InputFile name={"name"} isDropable />
     </section>
   );
 };
