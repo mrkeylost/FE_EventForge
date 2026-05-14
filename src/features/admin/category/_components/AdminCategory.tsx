@@ -1,5 +1,5 @@
 import DataTable from "@/components/ui/DataTable";
-import { Button, Tooltip, useDisclosure } from "@heroui/react";
+import { Button, useDisclosure } from "@heroui/react";
 import { Eye, Pencil, Trash2 } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -7,10 +7,12 @@ import { Key, ReactNode, useCallback, useEffect } from "react";
 import { COLUMN_LIST_CATEGORY } from "../../../../constant/Category.constants";
 import useCategory from "@/features/admin/category/_hooks/useCategory";
 import AddCategoryModal from "./AddCategoryModal";
+import DeleteCategoryModal from "./DeleteCategoryModal";
 
 const AdminCategory = () => {
   const router = useRouter();
-  const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure();
+  const addModal = useDisclosure();
+  const deleteModal = useDisclosure();
   const {
     setUrl,
     currentPage,
@@ -20,6 +22,8 @@ const AdminCategory = () => {
     handleChangeSearch,
     handleClearSearch,
     dataCategory,
+    selectedCategory,
+    setSelectedCategory,
     isLoadingCategory,
     isRefetchingCategory,
     refetchCategory,
@@ -47,48 +51,46 @@ const AdminCategory = () => {
         case "actions":
           return (
             <div className="flex items-center justify-center gap-1">
-              <Tooltip content="View Category">
-                <Button
-                  key="detail-category-button"
-                  isIconOnly
-                  variant="light"
-                  size="sm"
-                  aria-label="View category"
-                  onPress={() => router.push(`/admin/category/${category._id}`)}
-                >
-                  <Eye size={16} />
-                </Button>
-              </Tooltip>
-              <Tooltip content="Edit category">
-                <Button
-                  key="edit-category-button"
-                  isIconOnly
-                  variant="light"
-                  size="sm"
-                  aria-label="Edit category"
-                >
-                  <Pencil size={16} />
-                </Button>
-              </Tooltip>
-              <Tooltip color="danger" content="Delete category">
-                <Button
-                  key="delete-category-button"
-                  isIconOnly
-                  variant="light"
-                  size="sm"
-                  color="danger"
-                  aria-label="Delete category"
-                >
-                  <Trash2 size={16} />
-                </Button>
-              </Tooltip>
+              <Button
+                key="detail-category-button"
+                isIconOnly
+                variant="light"
+                size="sm"
+                aria-label="View category"
+                onPress={() => router.push(`/admin/category/${category._id}`)}
+              >
+                <Eye size={16} />
+              </Button>
+              <Button
+                key="edit-category-button"
+                isIconOnly
+                variant="light"
+                size="sm"
+                aria-label="Edit category"
+              >
+                <Pencil size={16} />
+              </Button>
+              <Button
+                key="delete-category-button"
+                isIconOnly
+                variant="light"
+                size="sm"
+                color="danger"
+                aria-label="Delete category"
+                onPress={() => {
+                  setSelectedCategory(category);
+                  deleteModal.onOpen();
+                }}
+              >
+                <Trash2 size={16} />
+              </Button>
             </div>
           );
         default:
           return cellValue as ReactNode;
       }
     },
-    [router],
+    [router, deleteModal, setSelectedCategory],
   );
 
   return (
@@ -100,7 +102,7 @@ const AdminCategory = () => {
           data={dataCategory?.data || []}
           isLoading={isLoadingCategory || isRefetchingCategory}
           buttonTopContentLabel="Create Category"
-          onClickButtonTop={onOpen}
+          onClickButtonTop={addModal.onOpen}
           currentPage={Number(currentPage)}
           totalPages={dataCategory?.pagination.totalPages}
           limit={String(currentLimit)}
@@ -112,11 +114,12 @@ const AdminCategory = () => {
         />
       )}
 
-      <AddCategoryModal
-        isOpen={isOpen}
-        onClose={onClose}
-        onOpenChange={onOpenChange}
+      <AddCategoryModal {...addModal} refetchCategory={refetchCategory} />
+
+      <DeleteCategoryModal
+        {...deleteModal}
         refetchCategory={refetchCategory}
+        data={selectedCategory}
       />
     </section>
   );

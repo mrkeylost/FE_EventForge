@@ -2,12 +2,17 @@ import { DELAY, LIMIT_DEFAULT, PAGE_DEFAULT } from "@/constant/list.constants";
 import categoryServices from "@/services/category.service";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/router";
-import { ChangeEvent } from "react";
+import { ChangeEvent, useState } from "react";
 import useDebounce from "../../../../hooks/useDebounce";
 
 const useCategory = () => {
   const router = useRouter();
   const debounce = useDebounce();
+
+  const [selectedCategory, setSelectedCategory] = useState<Record<
+    string,
+    unknown
+  > | null>(null);
 
   const currentLimit = router.query.limit;
   const currentPage = router.query.page;
@@ -88,6 +93,8 @@ const useCategory = () => {
   return {
     setUrl,
     dataCategory,
+    selectedCategory,
+    setSelectedCategory,
     isLoadingCategory,
     isRefetchingCategory,
     refetchCategory,

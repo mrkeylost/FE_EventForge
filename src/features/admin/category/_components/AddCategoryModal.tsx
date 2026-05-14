@@ -13,6 +13,7 @@ import {
 import useAddCategoryModal from "../_hooks/useAddCategoryModal";
 import { Controller } from "react-hook-form";
 import { useEffect } from "react";
+import { Save } from "lucide-react";
 
 interface PropTypes {
   isOpen: boolean;
@@ -125,7 +126,12 @@ const AddCategoryModal = (props: PropTypes) => {
             >
               Cancel
             </Button>
-            <Button type="submit" color="danger" disabled={disabledButton}>
+            <Button
+              type="submit"
+              color="danger"
+              disabled={disabledButton}
+              startContent={<Save />}
+            >
               {isPendingAddCategory ? (
                 <Spinner variant="dots" size="sm" color="white" />
               ) : (
