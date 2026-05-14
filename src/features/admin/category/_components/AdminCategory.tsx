@@ -1,15 +1,16 @@
 import DataTable from "@/components/ui/DataTable";
-import { Button, Tooltip } from "@heroui/react";
+import { Button, Tooltip, useDisclosure } from "@heroui/react";
 import { Eye, Pencil, Trash2 } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { Key, ReactNode, useCallback, useEffect } from "react";
 import { COLUMN_LIST_CATEGORY } from "../../../../constant/Category.constants";
 import useCategory from "@/features/admin/category/_hooks/useCategory";
-import InputFile from "@/components/ui/InputFile";
+import AddCategoryModal from "./AddCategoryModal";
 
 const AdminCategory = () => {
   const router = useRouter();
+  const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure();
   const {
     setUrl,
     currentPage,
@@ -21,6 +22,7 @@ const AdminCategory = () => {
     dataCategory,
     isLoadingCategory,
     isRefetchingCategory,
+    refetchCategory,
   } = useCategory();
 
   useEffect(() => {
@@ -98,7 +100,7 @@ const AdminCategory = () => {
           data={dataCategory?.data || []}
           isLoading={isLoadingCategory || isRefetchingCategory}
           buttonTopContentLabel="Create Category"
-          onClickButtonTop={() => {}}
+          onClickButtonTop={onOpen}
           currentPage={Number(currentPage)}
           totalPages={dataCategory?.pagination.totalPages}
           limit={String(currentLimit)}
@@ -110,7 +112,12 @@ const AdminCategory = () => {
         />
       )}
 
-      <InputFile name={"name"} isDropable />
+      <AddCategoryModal
+        isOpen={isOpen}
+        onClose={onClose}
+        onOpenChange={onOpenChange}
+        refetchCategory={refetchCategory}
+      />
     </section>
   );
 };
