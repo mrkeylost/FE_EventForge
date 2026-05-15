@@ -8,4 +8,4 @@ export const LIMIT_DEFAULT = LIMIT_LISTS[0].value;
 
 export const PAGE_DEFAULT = 1;
 
-export const DELAY = 500;
+export const DELAY = 1000;

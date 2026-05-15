@@ -1,4 +1,5 @@
 import { LIMIT_LISTS } from "@/constant/list.constants";
+import useChangeURL from "@/hooks/useChangeURL";
 import { cn } from "@/utils/cn";
 import {
   Button,
@@ -15,20 +16,14 @@ import {
   TableRow,
 } from "@heroui/react";
 import { Plus, Search } from "lucide-react";
-import { ChangeEvent, Key, ReactNode, useMemo } from "react";
+import { Key, ReactNode, useMemo } from "react";
 
 interface PropTypes {
   columns: Record<string, unknown>[];
   data: Record<string, unknown>[];
-  currentPage: number;
   totalPages: number;
-  limit: string;
-  onChangeLimit: (e: ChangeEvent<HTMLSelectElement>) => void;
-  onChangePage: (page: number) => void;
   buttonTopContentLabel?: string;
   onClickButtonTop?: () => void;
-  onClear: () => void;
-  onSearchChange: (e: ChangeEvent<HTMLInputElement>) => void;
   renderCell: (item: Record<string, unknown>, columnKey: Key) => ReactNode;
   emptyContent: string;
   isLoading?: boolean;
@@ -38,19 +33,22 @@ const DataTable = (props: PropTypes) => {
   const {
     columns,
     data,
-    currentPage,
     totalPages,
-    limit,
-    onChangeLimit,
-    onChangePage,
     buttonTopContentLabel,
     onClickButtonTop,
     renderCell,
-    onClear,
-    onSearchChange,
     emptyContent,
     isLoading,
   } = props;
+
+  const {
+    currentPage,
+    currentLimit,
+    handleChangePage,
+    handleChangeLimit,
+    handleChangeSearch,
+    handleClearSearch,
+  } = useChangeURL();
 
   const topContent = useMemo(() => {
     return (
@@ -60,8 +58,8 @@ const DataTable = (props: PropTypes) => {
           className="w-full sm:w-64"
           placeholder="Search by name..."
           startContent={<Search />}
-          onClear={onClear}
-          onChange={onSearchChange}
+          onClear={handleClearSearch}
+          onChange={handleChangeSearch}
         />
         {buttonTopContentLabel && (
           <Button
@@ -75,7 +73,12 @@ const DataTable = (props: PropTypes) => {
         )}
       </div>
     );
-  }, [buttonTopContentLabel, onClickButtonTop, onClear, onSearchChange]);
+  }, [
+    buttonTopContentLabel,
+    onClickButtonTop,
+    handleChangeSearch,
+    handleClearSearch,
+  ]);
 
   const bottomContent = useMemo(() => {
     return (
@@ -84,10 +87,10 @@ const DataTable = (props: PropTypes) => {
           disallowEmptySelection
           className="hidden max-w-36 md:block"
           size="md"
-          selectedKeys={[limit]}
+          selectedKeys={[String(currentLimit)]}
           selectionMode="single"
           startContent={<p className="text-small">Show: </p>}
-          onChange={onChangeLimit}
+          onChange={handleChangeLimit}
         >
           {LIMIT_LISTS.map((item) => (
             <SelectItem key={item.value}>{item.label}</SelectItem>
@@ -102,15 +105,21 @@ const DataTable = (props: PropTypes) => {
               cursor: "bg-foreground text-background",
             }}
             color="danger"
-            page={currentPage}
+            page={Number(currentPage)}
             total={totalPages}
-            onChange={onChangePage}
+            onChange={handleChangePage}
             loop
           />
         )}
       </div>
     );
-  }, [limit, onChangeLimit, currentPage, totalPages, onChangePage]);
+  }, [
+    currentLimit,
+    currentPage,
+    totalPages,
+    handleChangeLimit,
+    handleChangePage,
+  ]);
 
   return (
     <Table

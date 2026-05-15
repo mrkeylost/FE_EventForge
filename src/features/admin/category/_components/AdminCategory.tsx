@@ -1,26 +1,19 @@
 import DataTable from "@/components/ui/DataTable";
-import { Button, useDisclosure } from "@heroui/react";
-import { Eye, Pencil, Trash2 } from "lucide-react";
+import { useDisclosure } from "@heroui/react";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { Key, ReactNode, useCallback, useEffect } from "react";
+import { Key, ReactNode, useCallback } from "react";
 import { COLUMN_LIST_CATEGORY } from "../../../../constant/Category.constants";
 import useCategory from "@/features/admin/category/_hooks/useCategory";
 import AddCategoryModal from "./AddCategoryModal";
 import DeleteCategoryModal from "./DeleteCategoryModal";
+import TableActions from "@/components/commons/TableActions";
 
 const AdminCategory = () => {
   const router = useRouter();
   const addModal = useDisclosure();
   const deleteModal = useDisclosure();
   const {
-    setUrl,
-    currentPage,
-    currentLimit,
-    handleChangePage,
-    handleChangeLimit,
-    handleChangeSearch,
-    handleClearSearch,
     dataCategory,
     selectedCategory,
     setSelectedCategory,
@@ -28,16 +21,6 @@ const AdminCategory = () => {
     isRefetchingCategory,
     refetchCategory,
   } = useCategory();
-
-  useEffect(() => {
-    if (!router.isReady) return;
-
-    const { limit, page, search } = router.query;
-
-    if (!limit || !page || search === undefined) {
-      setUrl();
-    }
-  }, [router.isReady, router.query, setUrl]);
 
   const renderCell = useCallback(
     (category: Record<string, unknown>, columnKey: Key) => {
@@ -49,42 +32,18 @@ const AdminCategory = () => {
             <Image src={`${cellValue}`} alt="icon" width={100} height={200} />
           );
         case "actions":
+          const handleDetailButton = () =>
+            router.push(`/admin/category/${category._id}`);
+          const handleDeleteButton = () => {
+            setSelectedCategory(category);
+            deleteModal.onOpen();
+          };
+
           return (
-            <div className="flex items-center justify-center gap-1">
-              <Button
-                key="detail-category-button"
-                isIconOnly
-                variant="light"
-                size="sm"
-                aria-label="View category"
-                onPress={() => router.push(`/admin/category/${category._id}`)}
-              >
-                <Eye size={16} />
-              </Button>
-              <Button
-                key="edit-category-button"
-                isIconOnly
-                variant="light"
-                size="sm"
-                aria-label="Edit category"
-              >
-                <Pencil size={16} />
-              </Button>
-              <Button
-                key="delete-category-button"
-                isIconOnly
-                variant="light"
-                size="sm"
-                color="danger"
-                aria-label="Delete category"
-                onPress={() => {
-                  setSelectedCategory(category);
-                  deleteModal.onOpen();
-                }}
-              >
-                <Trash2 size={16} />
-              </Button>
-            </div>
+            <TableActions
+              onPressButtonDetail={handleDetailButton}
+              onPressButtonDelete={handleDeleteButton}
+            />
           );
         default:
           return cellValue as ReactNode;
@@ -103,13 +62,7 @@ const AdminCategory = () => {
           isLoading={isLoadingCategory || isRefetchingCategory}
           buttonTopContentLabel="Create Category"
           onClickButtonTop={addModal.onOpen}
-          currentPage={Number(currentPage)}
           totalPages={dataCategory?.pagination.totalPages}
-          limit={String(currentLimit)}
-          onChangeLimit={handleChangeLimit}
-          onChangePage={handleChangePage}
-          onClear={handleClearSearch}
-          onSearchChange={handleChangeSearch}
           emptyContent={"No categories found"}
         />
       )}
