@@ -8,7 +8,7 @@ const categoryServices = {
     api.post(`${endpoint.CATEGORY}`, payload),
   getCategoryById: (id: string) => api.get(`${endpoint.CATEGORY}/${id}`),
   updateCategory: (id: string, payload: ICategory) =>
-    api.put(`${endpoint.CATEGORY}?${id}`, payload),
+    api.put(`${endpoint.CATEGORY}/${id}`, payload),
   deleteCategory: (id: string) => api.delete(`${endpoint.CATEGORY}/${id}`),
 };
 

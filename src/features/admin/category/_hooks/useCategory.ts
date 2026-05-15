@@ -92,12 +92,15 @@ const useCategory = () => {
 
   return {
     setUrl,
+
     dataCategory,
     selectedCategory,
     setSelectedCategory,
+
     isLoadingCategory,
     isRefetchingCategory,
     refetchCategory,
+
     currentPage,
     currentLimit,
     currentSearch,

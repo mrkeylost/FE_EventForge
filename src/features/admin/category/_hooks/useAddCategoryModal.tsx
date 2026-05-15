@@ -129,15 +129,18 @@ const useAddCategoryModal = () => {
     control,
     errors,
     reset,
+
     handleSubmitForm,
     handleAddCategory,
     isPendingAddCategory,
     isSuccessAddCategory,
+
+    preview,
     handleUploadIcon,
     isPendingUploadFile,
     handleDeleteIcon,
     isPendingDeleteFile,
-    preview,
+
     handleOnClose,
   };
 };
