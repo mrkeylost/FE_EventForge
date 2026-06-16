@@ -7,6 +7,7 @@ import DataTable from "@/components/ui/DataTable";
 import { COLUMN_LIST_EVENT } from "@/constant/Event.constants";
 import TableActions from "@/components/commons/TableActions";
 import AddEventModal from "./AddEventModal";
+import DeleteEventModal from "./DeleteEventModal";
 
 const AdminEvent = () => {
   const router = useRouter();
@@ -84,6 +85,12 @@ const AdminEvent = () => {
       )}
 
       <AddEventModal {...addModal} refetchEvent={refetchEvent} />
+
+      <DeleteEventModal
+        {...deleteModal}
+        refetchEvent={refetchEvent}
+        data={selectedEvent}
+      />
     </section>
   );
 };
