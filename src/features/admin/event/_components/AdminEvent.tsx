@@ -6,6 +6,7 @@ import useEvent from "../_hooks/useEvent";
 import DataTable from "@/components/ui/DataTable";
 import { COLUMN_LIST_EVENT } from "@/constant/Event.constants";
 import TableActions from "@/components/commons/TableActions";
+import AddEventModal from "./AddEventModal";
 
 const AdminEvent = () => {
   const router = useRouter();
@@ -36,7 +37,7 @@ const AdminEvent = () => {
             />
           );
         case "isPublish":
-          const status = cellValue ? "Published" : "Not Published";
+          const status = cellValue ? "Published" : "Draft";
           return (
             <Chip
               className="capitalize"
@@ -81,6 +82,8 @@ const AdminEvent = () => {
           emptyContent={"No categories found"}
         />
       )}
+
+      <AddEventModal {...addModal} refetchEvent={refetchEvent} />
     </section>
   );
 };
