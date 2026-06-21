@@ -34,7 +34,7 @@ const InfoTab = (props: PropTypes) => {
 
   useEffect(() => {
     updateInfoSetValue("name", `${dataCategory?.name}`);
-    updateInfoSetValue("name", `${dataCategory?.description}`);
+    updateInfoSetValue("description", `${dataCategory?.description}`);
   }, [dataCategory, updateInfoSetValue]);
 
   useEffect(() => {

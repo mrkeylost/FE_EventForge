@@ -24,7 +24,30 @@ export const formatDateStandard = (date: DateValue) => {
 };
 
 export const toInputDate = (date: string) => {
-  const formattedDate = parseAbsoluteToLocal(`${date.replace(" ", "T")}+07.00`);
+  const [dateSplit, timeSplit] = date.split(" ");
+  if (!dateSplit || !timeSplit) return undefined;
 
-  return formattedDate;
+  const [year, month, day] = dateSplit.split("-").map(Number);
+  const isoString = `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}T${timeSplit}+07:00`;
+
+  try {
+    return parseAbsoluteToLocal(isoString);
+  } catch {
+    return undefined;
+  }
+};
+
+export const toGMTFormat = (date: string) => {
+  if (!date) return "";
+
+  const [dateSplit, timeSplit] = date.split(" ");
+
+  const [year, month, day] = dateSplit.split("-").map(Number);
+  const [hour, minute, second] = timeSplit.split(":").map(Number);
+
+  const GMTDate = new Date(
+    Date.UTC(year, month - 1, day, hour, minute, second),
+  );
+
+  return GMTDate.toUTCString();
 };

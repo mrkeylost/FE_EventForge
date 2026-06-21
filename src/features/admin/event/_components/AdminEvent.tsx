@@ -31,7 +31,7 @@ const AdminEvent = () => {
           return (
             <Image
               src={`${cellValue}`}
-              alt="icon"
+              alt="banner"
               width={200}
               height={100}
               className="aspect-video w-36 rounded-lg object-cover"
@@ -51,7 +51,7 @@ const AdminEvent = () => {
           );
         case "actions":
           const handleDetailButton = () =>
-            router.push(`/admin/events/${event._id}`);
+            router.push(`/admin/event/${event._id}`);
           const handleDeleteButton = () => {
             setSelectedEvent(event);
             deleteModal.onOpen();
@@ -80,7 +80,7 @@ const AdminEvent = () => {
           buttonTopContentLabel="Create Event"
           onClickButtonTop={addModal.onOpen}
           totalPages={dataEvent?.pagination.totalPages}
-          emptyContent={"No categories found"}
+          emptyContent={"No events found"}
         />
       )}
 

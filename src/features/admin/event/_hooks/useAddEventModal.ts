@@ -11,7 +11,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { getLocalTimeZone, now } from "@internationalized/date";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import * as Yup from "yup";
 
@@ -70,7 +70,7 @@ const useAddEventModal = () => {
 
   const { data: dataRegion } = useQuery({
     queryKey: ["Region", searchRegency],
-    queryFn: () => eventServices.searchLocationNyRegency(`${searchRegency}`),
+    queryFn: () => eventServices.searchLocationByRegency(`${searchRegency}`),
     enabled: searchRegency !== "",
   });
 
@@ -91,8 +91,10 @@ const useAddEventModal = () => {
     name: "banner",
   });
 
-  addEventSetValue("startDate", now(getLocalTimeZone()));
-  addEventSetValue("endDate", now(getLocalTimeZone()));
+  useEffect(() => {
+    addEventSetValue("startDate", now(getLocalTimeZone()));
+    addEventSetValue("endDate", now(getLocalTimeZone()));
+  }, [addEventSetValue]);
 
   const handleUploadBanner = (
     files: FileList,
@@ -159,10 +161,10 @@ const useAddEventModal = () => {
       isFeatured: data.isFeatured === "true",
       isPublish: data.isPublish === "true",
       isOnline: data.isOnline === "true",
-      startDate: formatDateStandard(data.startDate),
-      endDate: formatDateStandard(data.endDate),
+      startDate: data.startDate ? formatDateStandard(data.startDate) : "",
+      endDate: data.endDate ? formatDateStandard(data.endDate) : "",
       location: {
-        region,
+        region: region ? region : "",
         coordinates: [Number(latitude), Number(longitude)],
       },
       banner: data.banner,

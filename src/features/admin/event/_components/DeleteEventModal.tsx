@@ -10,6 +10,7 @@ import {
 import { useEffect } from "react";
 import { Trash2 } from "lucide-react";
 import useDeleteEventModal from "../_hooks/useDeleteEvent";
+import { toGMTFormat } from "@/utils/date";
 
 interface PropTypes {
   isOpen: boolean;
@@ -52,12 +53,12 @@ const DeleteEventModal = (props: PropTypes) => {
             <div className="flex gap-2">
               <span className="text-default-500 w-20 shrink-0">Start Date</span>
               <span className="text-default-500">:</span>
-              <span>{data?.startDate as string}</span>
+              <span>{toGMTFormat(data?.startDate as string)}</span>
             </div>
             <div className="flex gap-2">
               <span className="text-default-500 w-20 shrink-0">End Date</span>
               <span className="text-default-500">:</span>
-              <span>{data?.endDate as string}</span>
+              <span>{toGMTFormat(data?.endDate as string)}</span>
             </div>
             <div className="flex gap-2">
               <span className="text-default-500 w-20 shrink-0">
