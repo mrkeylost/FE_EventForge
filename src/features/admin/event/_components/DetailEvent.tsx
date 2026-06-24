@@ -9,14 +9,10 @@ const DetailEvent = () => {
   const {
     dataEvent,
 
-    dataCity,
-    isPendingDataCity,
-
     handleUpdateEvent,
     handleUpdateEventInformation,
     handleUpdateEventLocation,
     isPendingUpdateEvent,
-    isSuccessUpdateEvent,
   } = useDetailEvent();
 
   return (
@@ -35,7 +31,6 @@ const DetailEvent = () => {
             currentCover={dataEvent?.banner}
             onUpdate={handleUpdateEvent}
             isPendingUpdate={isPendingUpdateEvent}
-            isSuccessUpdate={isSuccessUpdateEvent}
           />
         </Tab>
         <Tab
@@ -51,7 +46,6 @@ const DetailEvent = () => {
             dataEvent={dataEvent}
             onUpdate={handleUpdateEventInformation}
             isPendingUpdate={isPendingUpdateEvent}
-            isSuccessUpdate={isSuccessUpdateEvent}
           />
         </Tab>
         <Tab
@@ -65,11 +59,8 @@ const DetailEvent = () => {
         >
           <LocationTab
             dataEvent={dataEvent}
-            dataCity={dataCity?.data?.data[0].name}
-            isPendingDataCity={isPendingDataCity}
             onUpdate={handleUpdateEventLocation}
             isPendingUpdate={isPendingUpdateEvent}
-            isSuccessUpdate={isSuccessUpdateEvent}
           />
         </Tab>
       </Tabs>

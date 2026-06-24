@@ -19,34 +19,27 @@ import useLocationTab from "../_hooks/useLocationTab";
 
 interface PropTypes {
   dataEvent: IEventForm;
-  dataCity: string;
-  isPendingDataCity: boolean;
-  onUpdate: (data: IEventForm) => void;
+  onUpdate: (data: IEventForm, onSuccess?: () => void) => void;
   isPendingUpdate: boolean;
-  isSuccessUpdate: boolean;
 }
 
 const LocationTab = (props: PropTypes) => {
-  const {
-    dataEvent,
-    dataCity,
-    isPendingDataCity,
-    onUpdate,
-    isPendingUpdate,
-    isSuccessUpdate,
-  } = props;
+  const { dataEvent, onUpdate, isPendingUpdate } = props;
 
   const {
     dataRegion,
     searchRegency,
     handleSearchRegion,
 
+    dataInitialRegion,
+    isPendingInitialRegion,
+
     updateLocationControl,
     updateLocationErrors,
     updateLocationReset,
     updateLocationSetValue,
     handleSubmitUpdateLocation,
-  } = useLocationTab();
+  } = useLocationTab(dataEvent.location?.region);
 
   useEffect(() => {
     updateLocationSetValue("isOnline", `${dataEvent?.isOnline}`);
@@ -61,11 +54,17 @@ const LocationTab = (props: PropTypes) => {
     );
   }, [dataEvent, updateLocationSetValue]);
 
-  useEffect(() => {
-    if (isSuccessUpdate) {
-      updateLocationReset();
-    }
-  }, [isSuccessUpdate, updateLocationReset]);
+  const regionItems = [
+    ...(dataInitialRegion?.data?.data ?? []),
+    ...(dataRegion?.data?.data && searchRegency !== ""
+      ? dataRegion.data.data.filter(
+          (r: IRegion) =>
+            !dataInitialRegion?.data?.data?.some(
+              (init: IRegion) => init.id === r.id,
+            ),
+        )
+      : []),
+  ];
 
   return (
     <Card className="w-full p-4 lg:w-1/2">
@@ -78,7 +77,9 @@ const LocationTab = (props: PropTypes) => {
       <CardBody>
         <form
           className="flex flex-col gap-4"
-          onSubmit={handleSubmitUpdateLocation(onUpdate)}
+          onSubmit={handleSubmitUpdateLocation((data) =>
+            onUpdate(data, () => updateLocationReset()),
+          )}
         >
           <Skeleton isLoaded={!!dataEvent} className="rounded-lg">
             <Controller
@@ -103,7 +104,7 @@ const LocationTab = (props: PropTypes) => {
           </Skeleton>
 
           <Skeleton
-            isLoaded={!!dataEvent?.location?.region && !isPendingDataCity}
+            isLoaded={!!dataEvent?.location?.region && !isPendingInitialRegion}
             className="rounded-lg"
           >
             <Controller
@@ -112,22 +113,21 @@ const LocationTab = (props: PropTypes) => {
               render={({ field: { onChange, ...field } }) => (
                 <Autocomplete
                   {...field}
-                  defaultItems={
-                    dataRegion?.data.data && searchRegency !== ""
-                      ? dataRegion?.data.data
-                      : []
-                  }
+                  key={dataInitialRegion?.data?.data[0].id}
+                  defaultItems={regionItems}
                   label="City"
                   placeholder="Search city here.."
                   variant="bordered"
-                  defaultInputValue={dataCity}
+                  defaultInputValue={
+                    dataInitialRegion?.data?.data[0].name ?? ""
+                  }
                   isInvalid={!!updateLocationErrors.region}
                   errorMessage={updateLocationErrors.region?.message}
                   onChange={(key: Key | null) => onChange(key)}
                   onInputChange={(search) => handleSearchRegion(search)}
                 >
                   {(region: IRegion) => (
-                    <AutocompleteItem key={region._id}>
+                    <AutocompleteItem key={region.id}>
                       {region.name}
                     </AutocompleteItem>
                   )}

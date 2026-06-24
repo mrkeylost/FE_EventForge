@@ -14,7 +14,7 @@ const updateLocationSchema = Yup.object().shape({
   longitude: Yup.string().required("Please input longitude coordinate"),
 });
 
-const useLocationTab = () => {
+const useLocationTab = (currentRegencyId?: string) => {
   const debounce = useDebounce();
   const {
     control: updateLocationControl,
@@ -38,10 +38,20 @@ const useLocationTab = () => {
     debounce(() => setSearchRegency(region), DELAY);
   };
 
+  const { data: dataInitialRegion, isPending: isPendingInitialRegion } =
+    useQuery({
+      queryKey: ["InitialRegion", currentRegencyId],
+      queryFn: () => eventServices.getRegencyData(Number(currentRegencyId)),
+      enabled: !!currentRegencyId,
+    });
+
   return {
     dataRegion,
     searchRegency,
     handleSearchRegion,
+
+    dataInitialRegion,
+    isPendingInitialRegion,
 
     updateLocationControl,
     updateLocationErrors,

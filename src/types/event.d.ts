@@ -27,6 +27,6 @@ export interface IEventForm extends IEvent {
 }
 
 export interface IRegion {
-  _id: string;
+  id: string;
   name: string;
 }

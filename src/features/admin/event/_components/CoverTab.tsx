@@ -10,18 +10,19 @@ import {
 import { Save } from "lucide-react";
 import Image from "next/image";
 import { Controller } from "react-hook-form";
-import { useEffect } from "react";
 import useCoverTab from "../_hooks/useCoverTab";
 
 interface PropTypes {
   currentCover: string;
-  onUpdate: (data: { banner: FileList | string }) => void;
+  onUpdate: (
+    data: { banner: FileList | string },
+    onSuccess?: () => void,
+  ) => void;
   isPendingUpdate: boolean;
-  isSuccessUpdate: boolean;
 }
 
 const CoverTab = (props: PropTypes) => {
-  const { currentCover, onUpdate, isPendingUpdate, isSuccessUpdate } = props;
+  const { currentCover, onUpdate, isPendingUpdate } = props;
 
   const {
     updateCoverControl,
@@ -36,12 +37,6 @@ const CoverTab = (props: PropTypes) => {
     isPendingDeleteFile,
   } = useCoverTab();
 
-  useEffect(() => {
-    if (isSuccessUpdate) {
-      updateCoverReset();
-    }
-  }, [isSuccessUpdate, updateCoverReset]);
-
   return (
     <Card className="w-full p-4 lg:w-1/2">
       <CardHeader className="flex-col items-center">
@@ -53,7 +48,9 @@ const CoverTab = (props: PropTypes) => {
       <CardBody>
         <form
           className="flex flex-col gap-4"
-          onSubmit={handleSubmitUpdateCover(onUpdate)}
+          onSubmit={handleSubmitUpdateCover((data) =>
+            onUpdate(data, () => updateCoverReset()),
+          )}
         >
           <div className="flex flex-col gap-2">
             <p className="text-default-700 text-sm font-medium">

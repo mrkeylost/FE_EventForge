@@ -23,13 +23,12 @@ import { toInputDate } from "@/utils/date";
 
 interface PropTypes {
   dataEvent: IEventForm;
-  onUpdate: (data: IEventForm) => void;
+  onUpdate: (data: IEventForm, onSuccess?: () => void) => void;
   isPendingUpdate: boolean;
-  isSuccessUpdate: boolean;
 }
 
 const InfoTab = (props: PropTypes) => {
-  const { dataEvent, onUpdate, isPendingUpdate, isSuccessUpdate } = props;
+  const { dataEvent, onUpdate, isPendingUpdate } = props;
 
   const {
     dataCategory,
@@ -45,21 +44,12 @@ const InfoTab = (props: PropTypes) => {
     updateInfoSetValue("name", `${dataEvent?.name}`);
     updateInfoSetValue("slug", `${dataEvent?.slug}`);
     updateInfoSetValue("category", `${dataEvent?.category}`);
+    updateInfoSetValue("startDate", toInputDate(`${dataEvent.startDate}`));
+    updateInfoSetValue("endDate", toInputDate(`${dataEvent.endDate}`));
     updateInfoSetValue("isPublish", `${dataEvent?.isPublish}`);
     updateInfoSetValue("isFeatured", `${dataEvent?.isFeatured}`);
     updateInfoSetValue("description", `${dataEvent?.description}`);
-
-    const start = toInputDate(`${dataEvent.startDate}`);
-    if (start) updateInfoSetValue("startDate", start);
-    const end = toInputDate(`${dataEvent.endDate}`);
-    if (end) updateInfoSetValue("endDate", end);
   }, [dataEvent, updateInfoSetValue]);
-
-  useEffect(() => {
-    if (isSuccessUpdate) {
-      updateInfoReset();
-    }
-  }, [isSuccessUpdate, updateInfoReset]);
 
   return (
     <Card className="w-full p-4 lg:w-1/2">
@@ -72,7 +62,9 @@ const InfoTab = (props: PropTypes) => {
       <CardBody>
         <form
           className="flex flex-col gap-4"
-          onSubmit={handleSubmitUpdateInfo(onUpdate)}
+          onSubmit={handleSubmitUpdateInfo((data) =>
+            onUpdate(data, () => updateInfoReset()),
+          )}
         >
           <Skeleton isLoaded={!!dataEvent?.name} className="rounded-lg">
             <Controller
@@ -154,6 +146,7 @@ const InfoTab = (props: PropTypes) => {
                   autoComplete="off"
                   showMonthAndYearPickers
                   hideTimeZone
+                  // defaultValue={dataEvent?.startDate}
                   isInvalid={!!updateInfoErrors.startDate}
                   errorMessage={updateInfoErrors.startDate?.message}
                   className="mt-2"
@@ -174,6 +167,7 @@ const InfoTab = (props: PropTypes) => {
                   autoComplete="off"
                   showMonthAndYearPickers
                   hideTimeZone
+                  // defaultValue={dataEvent?.endDate}
                   isInvalid={!!updateInfoErrors.endDate}
                   errorMessage={updateInfoErrors.endDate?.message}
                   className="mt-2"

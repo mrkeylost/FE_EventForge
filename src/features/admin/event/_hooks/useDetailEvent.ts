@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { addToast } from "@heroui/react";
 import eventServices from "@/services/event.service";
@@ -7,6 +7,7 @@ import { formatDateStandard } from "@/utils/date";
 
 const useDetailEvent = () => {
   const { query, isReady } = useRouter();
+  const queryClient = useQueryClient();
 
   /*====================== Get Event By ID =============================*/
 
@@ -16,8 +17,8 @@ const useDetailEvent = () => {
     return res.data.data;
   };
 
-  const { data: dataEvent, refetch: refetchEvent } = useQuery({
-    queryKey: ["Event"],
+  const { data: dataEvent } = useQuery({
+    queryKey: ["Event", query.id],
     queryFn: () => getEventById(`${query.id}`),
     enabled: isReady,
   });
@@ -30,28 +31,25 @@ const useDetailEvent = () => {
     return res.data.data;
   };
 
-  const {
-    mutate: mutateUpdateEvent,
-    isPending: isPendingUpdateEvent,
-    isSuccess: isSuccessUpdateEvent,
-  } = useMutation({
-    mutationFn: (payload: IEvent) => updateEvent(payload),
-    onError(err) {
-      addToast({
-        title: "Update Event Failed",
-        description: err.message,
-        color: "danger",
-      });
-    },
-    onSuccess: () => {
-      refetchEvent();
+  const { mutate: mutateUpdateEvent, isPending: isPendingUpdateEvent } =
+    useMutation({
+      mutationFn: (payload: IEvent) => updateEvent(payload),
+      onError(err) {
+        addToast({
+          title: "Update Event Failed",
+          description: err.message,
+          color: "danger",
+        });
+      },
+      onSuccess: () => {
+        addToast({
+          title: "Update event success",
+          color: "success",
+        });
 
-      addToast({
-        title: "Update event success",
-        color: "success",
-      });
-    },
-  });
+        queryClient.invalidateQueries({ queryKey: ["Event"] });
+      },
+    });
 
   const handleUpdateEvent = (data: IEvent) => mutateUpdateEvent(data);
 
@@ -84,24 +82,13 @@ const useDetailEvent = () => {
     mutateUpdateEvent(payload);
   };
 
-  const { data: dataCity, isPending: isPendingDataCity } = useQuery({
-    queryKey: ["City"],
-    queryFn: () =>
-      eventServices.getRegencyData(Number(dataEvent?.location?.region)),
-    enabled: !!dataEvent?.location?.region,
-  });
-
   return {
     dataEvent,
-
-    dataCity,
-    isPendingDataCity,
 
     handleUpdateEvent,
     handleUpdateEventInformation,
     handleUpdateEventLocation,
     isPendingUpdateEvent,
-    isSuccessUpdateEvent,
   };
 };
 

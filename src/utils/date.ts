@@ -1,11 +1,11 @@
 import { DateValue } from "@heroui/react";
 import { parseAbsoluteToLocal } from "@internationalized/date";
 
-const standardTime = (time: number) => {
-  if (time < 10) {
-    return `0${time}`;
+const standardDateTimeFormat = (dateValue: number) => {
+  if (dateValue < 10) {
+    return `0${dateValue}`;
   } else {
-    return time;
+    return dateValue;
   }
 };
 
@@ -18,23 +18,16 @@ export const formatDateStandard = (date: DateValue) => {
   const minute = "minute" in date ? date.minute : 0;
   const second = "second" in date ? date.second : 0;
 
-  const result = `${year}-${month}-${day} ${standardTime(hour)}:${standardTime(minute)}:${standardTime(second)}`;
+  const result = `${year}-${standardDateTimeFormat(month)}-${standardDateTimeFormat(day)} ${standardDateTimeFormat(hour)}:${standardDateTimeFormat(minute)}:${standardDateTimeFormat(second)}`;
 
   return result;
 };
 
 export const toInputDate = (date: string) => {
   const [dateSplit, timeSplit] = date.split(" ");
-  if (!dateSplit || !timeSplit) return undefined;
+  const isoString = `${dateSplit}T${timeSplit}+07:00`;
 
-  const [year, month, day] = dateSplit.split("-").map(Number);
-  const isoString = `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}T${timeSplit}+07:00`;
-
-  try {
-    return parseAbsoluteToLocal(isoString);
-  } catch {
-    return undefined;
-  }
+  return parseAbsoluteToLocal(isoString);
 };
 
 export const toGMTFormat = (date: string) => {
