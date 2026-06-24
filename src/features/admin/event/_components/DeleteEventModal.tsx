@@ -11,17 +11,18 @@ import { useEffect } from "react";
 import { Trash2 } from "lucide-react";
 import useDeleteEventModal from "../_hooks/useDeleteEvent";
 import { toGMTFormat } from "@/utils/date";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface PropTypes {
   isOpen: boolean;
   onClose: () => void;
   onOpenChange: () => void;
-  refetchEvent: () => void;
   data: Record<string, unknown> | null;
 }
 
 const DeleteEventModal = (props: PropTypes) => {
-  const { isOpen, onClose, onOpenChange, refetchEvent, data } = props;
+  const queryClient = useQueryClient();
+  const { isOpen, onClose, onOpenChange, data } = props;
   const { handleDeleteEvent, isPendingDeleteEvent, isSuccessDeleteEvent } =
     useDeleteEventModal();
 
@@ -29,9 +30,9 @@ const DeleteEventModal = (props: PropTypes) => {
     if (isSuccessDeleteEvent) {
       onClose();
 
-      refetchEvent();
+      queryClient.invalidateQueries({ queryKey: ["Event"] });
     }
-  }, [isSuccessDeleteEvent, onClose, refetchEvent]);
+  }, [isSuccessDeleteEvent, onClose, queryClient]);
 
   return (
     <Modal

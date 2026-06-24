@@ -14,16 +14,17 @@ import useAddCategoryModal from "../_hooks/useAddCategoryModal";
 import { Controller } from "react-hook-form";
 import { useEffect } from "react";
 import { Save } from "lucide-react";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface PropTypes {
   isOpen: boolean;
   onClose: () => void;
   onOpenChange: () => void;
-  refetchCategory: () => void;
 }
 
 const AddCategoryModal = (props: PropTypes) => {
-  const { isOpen, onClose, onOpenChange, refetchCategory } = props;
+  const queryClient = useQueryClient();
+  const { isOpen, onClose, onOpenChange } = props;
   const {
     control,
     errors,
@@ -43,9 +44,9 @@ const AddCategoryModal = (props: PropTypes) => {
     if (isSuccessAddCategory) {
       onClose();
 
-      refetchCategory();
+      queryClient.invalidateQueries({ queryKey: ["Category"] });
     }
-  }, [isSuccessAddCategory, onClose, refetchCategory]);
+  }, [isSuccessAddCategory, onClose, queryClient]);
 
   const disabledButton =
     isPendingAddCategory || isPendingUploadFile || isPendingDeleteFile;

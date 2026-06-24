@@ -19,7 +19,6 @@ const AdminEvent = () => {
     setSelectedEvent,
     isLoadingEvent,
     isRefetchingEvent,
-    refetchEvent,
   } = useEvent();
 
   const renderCell = useCallback(
@@ -84,13 +83,9 @@ const AdminEvent = () => {
         />
       )}
 
-      <AddEventModal {...addModal} refetchEvent={refetchEvent} />
+      <AddEventModal {...addModal} />
 
-      <DeleteEventModal
-        {...deleteModal}
-        refetchEvent={refetchEvent}
-        data={selectedEvent}
-      />
+      <DeleteEventModal {...deleteModal} data={selectedEvent} />
     </section>
   );
 };

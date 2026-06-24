@@ -1,11 +1,12 @@
 import categoryServices from "@/services/category.service";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { ICategory } from "@/types/category";
 import { addToast } from "@heroui/react";
 
 const useDetailCategory = () => {
   const { query, isReady } = useRouter();
+  const queryClient = useQueryClient();
 
   /*====================== Get Category By ID =============================*/
 
@@ -15,8 +16,8 @@ const useDetailCategory = () => {
     return res.data.data;
   };
 
-  const { data: dataCategory, refetch: refetchCategory } = useQuery({
-    queryKey: ["Category"],
+  const { data: dataCategory } = useQuery({
+    queryKey: ["Category", query.id],
     queryFn: () => getCategoryById(`${query.id}`),
     enabled: isReady,
   });
@@ -43,12 +44,12 @@ const useDetailCategory = () => {
       });
     },
     onSuccess: () => {
-      refetchCategory();
-
       addToast({
         title: "Update category success",
         color: "success",
       });
+
+      queryClient.invalidateQueries({ queryKey: ["Category"] });
     },
   });
 

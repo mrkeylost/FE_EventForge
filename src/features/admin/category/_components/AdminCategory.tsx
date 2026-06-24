@@ -19,7 +19,6 @@ const AdminCategory = () => {
     setSelectedCategory,
     isLoadingCategory,
     isRefetchingCategory,
-    refetchCategory,
   } = useCategory();
 
   const renderCell = useCallback(
@@ -67,13 +66,9 @@ const AdminCategory = () => {
         />
       )}
 
-      <AddCategoryModal {...addModal} refetchCategory={refetchCategory} />
+      <AddCategoryModal {...addModal} />
 
-      <DeleteCategoryModal
-        {...deleteModal}
-        refetchCategory={refetchCategory}
-        data={selectedCategory}
-      />
+      <DeleteCategoryModal {...deleteModal} data={selectedCategory} />
     </section>
   );
 };

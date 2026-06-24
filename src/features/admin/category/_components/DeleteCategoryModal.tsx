@@ -10,17 +10,18 @@ import {
 import useDeleteCategoryModal from "../_hooks/useDeleteCategory";
 import { useEffect } from "react";
 import { Trash2 } from "lucide-react";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface PropTypes {
   isOpen: boolean;
   onClose: () => void;
   onOpenChange: () => void;
-  refetchCategory: () => void;
   data: Record<string, unknown> | null;
 }
 
 const DeleteCategoryModal = (props: PropTypes) => {
-  const { isOpen, onClose, onOpenChange, refetchCategory, data } = props;
+  const queryClient = useQueryClient();
+  const { isOpen, onClose, onOpenChange, data } = props;
   const {
     handleDeleteCategory,
     isPendingDeleteCategory,
@@ -31,9 +32,9 @@ const DeleteCategoryModal = (props: PropTypes) => {
     if (isSuccessDeleteCategory) {
       onClose();
 
-      refetchCategory();
+      queryClient.invalidateQueries({ queryKey: ["Category"] });
     }
-  }, [isSuccessDeleteCategory, onClose, refetchCategory]);
+  }, [isSuccessDeleteCategory, onClose, queryClient]);
 
   return (
     <Modal

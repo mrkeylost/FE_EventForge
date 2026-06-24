@@ -22,16 +22,17 @@ import useAddEventModal from "../_hooks/useAddEventModal";
 import { ICategory } from "@/types/category";
 import { IRegion } from "@/types/event";
 import { getLocalTimeZone, now } from "@internationalized/date";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface PropTypes {
   isOpen: boolean;
   onClose: () => void;
   onOpenChange: () => void;
-  refetchEvent: () => void;
 }
 
 const AddEventModal = (props: PropTypes) => {
-  const { isOpen, onClose, onOpenChange, refetchEvent } = props;
+  const queryClient = useQueryClient();
+  const { isOpen, onClose, onOpenChange } = props;
   const {
     addEventControl,
     addEventErrors,
@@ -60,9 +61,9 @@ const AddEventModal = (props: PropTypes) => {
     if (isSuccessAddEvent) {
       onClose();
 
-      refetchEvent();
+      queryClient.invalidateQueries({ queryKey: ["Event"] });
     }
-  }, [isSuccessAddEvent, onClose, refetchEvent]);
+  }, [isSuccessAddEvent, onClose, queryClient]);
 
   const disabledButton =
     isPendingAddEvent || isPendingUploadFile || isPendingDeleteFile;
@@ -274,7 +275,7 @@ const AddEventModal = (props: PropTypes) => {
                     onInputChange={(search) => handleSearchRegion(search)}
                   >
                     {(region: IRegion) => (
-                      <AutocompleteItem key={region._id}>
+                      <AutocompleteItem key={region.id}>
                         {region.name}
                       </AutocompleteItem>
                     )}
