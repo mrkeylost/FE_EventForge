@@ -13,12 +13,14 @@ export interface IEvent {
   isPublish?: boolean | string;
   category?: string;
   location?: {
+    address: string;
     region: string;
     coordinates: number[];
   };
 }
 
 export interface IEventForm extends IEvent {
+  address?: string;
   region?: string;
   startDate?: DateValue;
   endDate?: DateValue;

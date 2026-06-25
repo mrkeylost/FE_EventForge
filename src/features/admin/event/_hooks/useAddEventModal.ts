@@ -41,6 +41,7 @@ const eventSchema = Yup.object().shape({
 
       return value[0].size <= MAX_FILE_SIZE;
     }),
+  address: Yup.string().required("Please input address"),
   region: Yup.string().required("Please select region"),
   latitude: Yup.string().required("Please input latitude coordinate"),
   longitude: Yup.string().required("Please input longitude coordinate"),
@@ -154,7 +155,7 @@ const useAddEventModal = () => {
   });
 
   const handleAddEvent = (dataForm: IEventForm) => {
-    const { latitude, longitude, region, ...data } = dataForm;
+    const { latitude, longitude, region, address, ...data } = dataForm;
 
     const payload: IEvent = {
       ...data,
@@ -164,6 +165,7 @@ const useAddEventModal = () => {
       startDate: data.startDate ? formatDateStandard(data.startDate) : "",
       endDate: data.endDate ? formatDateStandard(data.endDate) : "",
       location: {
+        address: address ? address : "",
         region: region ? region : "",
         coordinates: [Number(latitude), Number(longitude)],
       },

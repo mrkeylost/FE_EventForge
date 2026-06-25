@@ -256,6 +256,22 @@ const AddEventModal = (props: PropTypes) => {
             <div className="flex flex-col gap-3">
               <strong>Location</strong>
               <Controller
+                name="address"
+                control={addEventControl}
+                render={({ field }) => (
+                  <Input
+                    {...field}
+                    label="Address"
+                    variant="bordered"
+                    autoComplete="off"
+                    type="text"
+                    isInvalid={!!addEventErrors.latitude}
+                    errorMessage={addEventErrors.latitude?.message}
+                  />
+                )}
+              />
+
+              <Controller
                 name="region"
                 control={addEventControl}
                 render={({ field: { onChange, ...field } }) => (

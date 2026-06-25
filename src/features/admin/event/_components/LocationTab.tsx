@@ -43,6 +43,7 @@ const LocationTab = (props: PropTypes) => {
 
   useEffect(() => {
     updateLocationSetValue("isOnline", `${dataEvent?.isOnline}`);
+    updateLocationSetValue("address", `${dataEvent?.location?.address}`);
     updateLocationSetValue("region", `${dataEvent?.location?.region}`);
     updateLocationSetValue(
       "latitude",
@@ -99,6 +100,28 @@ const LocationTab = (props: PropTypes) => {
                   <SelectItem key="true">Online</SelectItem>
                   <SelectItem key="false">Offline</SelectItem>
                 </Select>
+              )}
+            />
+          </Skeleton>
+
+          <Skeleton
+            isLoaded={!!dataEvent?.location?.address}
+            className="rounded-lg"
+          >
+            <Controller
+              name="address"
+              control={updateLocationControl}
+              render={({ field }) => (
+                <Input
+                  {...field}
+                  label="Address"
+                  variant="bordered"
+                  autoComplete="off"
+                  type="text"
+                  defaultValue={String(dataEvent?.location?.address)}
+                  isInvalid={!!updateLocationErrors.address}
+                  errorMessage={updateLocationErrors.address?.message}
+                />
               )}
             />
           </Skeleton>

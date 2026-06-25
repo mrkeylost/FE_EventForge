@@ -9,6 +9,7 @@ import { DELAY } from "@/constant/list.constants";
 
 const updateLocationSchema = Yup.object().shape({
   isOnline: Yup.string().required("Please select event location"),
+  address: Yup.string().required("Please input address"),
   region: Yup.string().required("Please select region"),
   latitude: Yup.string().required("Please input latitude coordinate"),
   longitude: Yup.string().required("Please input longitude coordinate"),
