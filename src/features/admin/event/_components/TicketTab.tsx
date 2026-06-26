@@ -12,6 +12,8 @@ import useTicket from "../_hooks/useTicketTab";
 import { COLUMN_LIST_TICKET } from "@/constant/Ticket.constants";
 import { convertIDR } from "@/utils/currency";
 import { Plus } from "lucide-react";
+import AddTicketModal from "./AddTicketModal";
+import DeleteTicketModal from "./DeleteTicketModal";
 
 const TicketTab = () => {
   const addModal = useDisclosure();
@@ -81,9 +83,9 @@ const TicketTab = () => {
           totalPages={1}
           emptyContent={"No tickets found"}
         />
-        {/* <AddEventModal {...addModal} />
+        <AddTicketModal {...addModal} />
 
-      <DeleteEventModal {...deleteModal} data={selectedEvent} /> */}
+        <DeleteTicketModal {...deleteModal} data={selectedTicket} />
       </CardBody>
     </Card>
   );
