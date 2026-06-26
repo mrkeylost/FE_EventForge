@@ -2,6 +2,10 @@
 
 EventForge Frontend is the client-side application for an event management platform designed to simplify event creation, registration, and attendee management.
 
+# Current UI
+
+https://fe-event-management-gamma.vercel.app/
+
 ## Status
 
 🚧 This project is currently under active development and is not yet production-ready.
