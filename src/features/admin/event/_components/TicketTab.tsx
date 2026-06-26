@@ -14,6 +14,7 @@ import { convertIDR } from "@/utils/currency";
 import { Plus } from "lucide-react";
 import AddTicketModal from "./AddTicketModal";
 import DeleteTicketModal from "./DeleteTicketModal";
+import UpdateTicketModal from "./UpdateTicketModal";
 
 const TicketTab = () => {
   const addModal = useDisclosure();
@@ -35,8 +36,10 @@ const TicketTab = () => {
         case "price":
           return `${convertIDR(cellValue as number)}`;
         case "actions":
-          const handleDetailButton = () => setSelectedTicket(ticket);
-          updateModal.onOpen();
+          const handleDetailButton = () => {
+            setSelectedTicket(ticket);
+            updateModal.onOpen();
+          };
           const handleDeleteButton = () => {
             setSelectedTicket(ticket);
             deleteModal.onOpen();
@@ -84,6 +87,8 @@ const TicketTab = () => {
           emptyContent={"No tickets found"}
         />
         <AddTicketModal {...addModal} />
+
+        <UpdateTicketModal {...updateModal} data={selectedTicket} />
 
         <DeleteTicketModal {...deleteModal} data={selectedTicket} />
       </CardBody>
