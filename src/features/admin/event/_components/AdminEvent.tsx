@@ -1,18 +1,20 @@
 import { Chip, useDisclosure } from "@heroui/react";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { Key, ReactNode, useCallback } from "react";
+import { Key, ReactNode, useCallback, useEffect } from "react";
 import useEvent from "../_hooks/useEvent";
 import DataTable from "@/components/ui/DataTable";
 import { COLUMN_LIST_EVENT } from "@/constant/Event.constants";
 import TableActions from "@/components/commons/TableActions";
 import AddEventModal from "./AddEventModal";
 import DeleteEventModal from "./DeleteEventModal";
+import useChangeURL from "@/hooks/useChangeURL";
 
 const AdminEvent = () => {
   const router = useRouter();
   const addModal = useDisclosure();
   const deleteModal = useDisclosure();
+  const { setUrl } = useChangeURL();
   const {
     dataEvent,
     selectedEvent,
@@ -20,6 +22,10 @@ const AdminEvent = () => {
     isLoadingEvent,
     isRefetchingEvent,
   } = useEvent();
+
+  useEffect(() => {
+    if (router.isReady) setUrl();
+  }, [setUrl, router.isReady]);
 
   const renderCell = useCallback(
     (event: Record<string, unknown>, columnKey: Key) => {
