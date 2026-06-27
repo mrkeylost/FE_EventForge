@@ -7,6 +7,7 @@ import TableActions from "@/components/commons/TableActions";
 import useBanner from "../_hooks/useBanner";
 import { COLUMN_LIST_BANNER } from "@/constant/Banner.constants";
 import AddBannerModal from "./AddBannerModal";
+import DeleteBannerModal from "./DeleteBannerModal";
 
 const AdminBanner = () => {
   const router = useRouter();
@@ -44,7 +45,7 @@ const AdminBanner = () => {
           );
         case "actions":
           const handleDetailButton = () =>
-            router.push(`/admin/banners/${banner._id}`);
+            router.push(`/admin/banner/${banner._id}`);
           const handleDeleteButton = () => {
             setSelectedBanner(banner);
             deleteModal.onOpen();
@@ -80,7 +81,7 @@ const AdminBanner = () => {
 
       <AddBannerModal {...addModal} />
 
-      {/* <DeleteCategoryModal {...deleteModal} data={selectedCategory} /> */}
+      <DeleteBannerModal {...deleteModal} data={selectedBanner} />
     </section>
   );
 };
