@@ -2,6 +2,29 @@ import { useRouter } from "next/router";
 import useDebounce from "./useDebounce";
 import { DELAY, LIMIT_DEFAULT, PAGE_DEFAULT } from "@/constant/list.constants";
 import { ChangeEvent } from "react";
+import { GetServerSidePropsContext } from "next";
+
+export const withURLParams = (context: GetServerSidePropsContext) => {
+  const { query, resolvedUrl } = context;
+  const { limit, page, search } = query;
+
+  if (!limit || !page || search === undefined) {
+    const params = new URLSearchParams({
+      limit: String(limit || LIMIT_DEFAULT),
+      page: String(page || PAGE_DEFAULT),
+      search: String(search ?? ""),
+    });
+
+    return {
+      redirect: {
+        destination: `${resolvedUrl.split("?")[0]}?${params.toString()}`,
+        permanent: false,
+      },
+    };
+  }
+
+  return null;
+};
 
 const useChangeURL = () => {
   const router = useRouter();
@@ -10,16 +33,6 @@ const useChangeURL = () => {
   const currentLimit = router.query.limit;
   const currentPage = router.query.page;
   const currentSearch = router.query.search;
-
-  const setUrl = () => {
-    router.replace({
-      query: {
-        limit: currentLimit || LIMIT_DEFAULT,
-        page: currentPage || PAGE_DEFAULT,
-        search: currentSearch || "",
-      },
-    });
-  };
 
   const handleChangePage = (page: number) => {
     router.push({
@@ -63,8 +76,6 @@ const useChangeURL = () => {
   };
 
   return {
-    setUrl,
-
     currentPage,
     currentLimit,
     currentSearch,

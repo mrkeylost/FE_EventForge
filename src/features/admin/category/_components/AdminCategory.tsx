@@ -2,19 +2,17 @@ import DataTable from "@/components/ui/DataTable";
 import { useDisclosure } from "@heroui/react";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { Key, ReactNode, useCallback, useEffect } from "react";
+import { Key, ReactNode, useCallback } from "react";
 import { COLUMN_LIST_CATEGORY } from "../../../../constant/Category.constants";
 import useCategory from "@/features/admin/category/_hooks/useCategory";
 import AddCategoryModal from "./AddCategoryModal";
 import DeleteCategoryModal from "./DeleteCategoryModal";
 import TableActions from "@/components/commons/TableActions";
-import useChangeURL from "@/hooks/useChangeURL";
 
 const AdminCategory = () => {
   const router = useRouter();
   const addModal = useDisclosure();
   const deleteModal = useDisclosure();
-  const { setUrl } = useChangeURL();
   const {
     dataCategory,
     selectedCategory,
@@ -22,10 +20,6 @@ const AdminCategory = () => {
     isLoadingCategory,
     isRefetchingCategory,
   } = useCategory();
-
-  useEffect(() => {
-    if (router.isReady) setUrl();
-  }, [setUrl, router.isReady]);
 
   const renderCell = useCallback(
     (category: Record<string, unknown>, columnKey: Key) => {

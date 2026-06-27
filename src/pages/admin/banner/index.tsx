@@ -1,5 +1,5 @@
-import AdminDashboard from "@/features/admin/dashboard/_components/AdminDashboard";
 import DashboardLayout from "@/components/layouts/DashboardLayout";
+import AdminBanner from "@/features/admin/banner/_components/AdminBanner";
 import { withURLParams } from "@/hooks/useChangeURL";
 import { GetServerSideProps } from "next";
 
@@ -7,16 +7,16 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   return withURLParams(context) ?? { props: {} };
 };
 
-const AdminDashboardPage = () => {
+const AdminBannerPage = () => {
   return (
     <DashboardLayout
-      title="Dashboard"
-      description="Dashboard Admin"
+      title="Banner"
+      description="Manage your banner here"
       type="admin"
     >
-      <AdminDashboard />
+      <AdminBanner />
     </DashboardLayout>
   );
 };
 
-export default AdminDashboardPage;
+export default AdminBannerPage;
